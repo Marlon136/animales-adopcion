@@ -5,6 +5,7 @@ import { Location } from '../locations/entities/location.entity';
 import { User } from '../users/entities/user.entity';
 import { Animal } from '../animals/entities/animal.entity';
 import { SeederService } from './seeder.service';
+import { AdoptionRequest } from '../adoption-requests/entities/adoption-request.entity';
 
 @Module({
   imports: [
@@ -19,11 +20,11 @@ import { SeederService } from './seeder.service';
         username: cfg.getOrThrow('DB_USER'),
         password: cfg.getOrThrow('DB_PASSWORD'),
         database: cfg.getOrThrow('DB_NAME'),
-        entities: [Location, User, Animal], // solo entidades de la guía anterior
+        entities: [Location, User, Animal, AdoptionRequest], // solo entidades de la guía anterior
         synchronize: false,
       }),
     }),
-    TypeOrmModule.forFeature([Location, User, Animal]),
+    TypeOrmModule.forFeature([Location, User, Animal, AdoptionRequest]),
   ],
   providers: [SeederService],
 })

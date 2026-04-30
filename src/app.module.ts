@@ -14,13 +14,9 @@ import { UsersModule } from './users/users.module';
       inject: [ConfigService],
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
-        host: cfg.getOrThrow('DB_HOST'),
-        port: cfg.getOrThrow<number>('DB_PORT'),
-        username: cfg.getOrThrow('DB_USER'),
-        password: cfg.getOrThrow('DB_PASSWORD'),
-        database: cfg.getOrThrow('DB_NAME'),
 
-        // 🔥 ESTO ES LO QUE TE FALTA
+        url: `postgres://${cfg.getOrThrow('DB_USER')}:${cfg.getOrThrow('DB_PASSWORD')}@${cfg.getOrThrow('DB_HOST')}:${cfg.getOrThrow('DB_PORT')}/${cfg.getOrThrow('DB_NAME')}?sslmode=require`,
+
         ssl: {
           rejectUnauthorized: false,
         },

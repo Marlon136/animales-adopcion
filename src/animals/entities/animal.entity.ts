@@ -13,17 +13,15 @@ import { User } from '../../users/entities/user.entity';
 
 @Entity('animals')
 export class Animal {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+  @PrimaryGeneratedColumn('uuid') id: string;
   @Column() nombre: string;
   @Column() especie: string;
-  @Column('int') edad: number; // en meses
-  @Column({ length: 500 }) descripcion: string;
+  @Column() edad: number;
+  @Column({ nullable: true }) descripcion?: string;
   @Column({ default: 'disponible' }) estado: string;
-  @Column({ nullable: true }) imagen: string;
-  @Column() contacto: string; // email del refugio
+  @Column() contacto: string;
 
+  @Column({ nullable: true }) imagen?: string;
   // ManyToOne → Location  (un animal pertenece a un refugio)
   @ManyToOne(() => Location, (loc) => loc.animals, {
     eager: true,

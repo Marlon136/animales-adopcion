@@ -1,12 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
-import { AdoptionRequestsService }  from './adoption-requests.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+} from '@nestjs/common';
+import { AdoptionRequestsService } from './adoption-requests.service';
 import { CreateAdoptionRequestDto } from './dto/create-adoption-request.dto';
-import { UpdateAdoptionRequestDto } from './dto/update-adoption-request.dto';
+import { UpdateAdoptionStatusDto } from './dto/update-adoption-request.dto';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('adoption-requests')
 @Controller('adoption-requests')
 export class AdoptionRequestsController {
-  constructor(private readonly adoptionRequestsService: AdoptionRequestsService) {}
+  constructor(
+    private readonly adoptionRequestsService: AdoptionRequestsService,
+  ) {}
 
+  @ApiOperation({ summary: 'Crear solicitud de adopción' })
+  @ApiResponse({ status: 201, description: 'Solicitud creada' })
+  @ApiResponse({
+    status: 409,
+    description: 'Solicitud duplicada o animal ya adoptado',
+  })
   @Post()
   create(@Body() dto: CreateAdoptionRequestDto) {
     return this.adoptionRequestsService.create(dto);
@@ -22,11 +41,13 @@ export class AdoptionRequestsController {
     return this.adoptionRequestsService.findOne(id);
   }
 
-    // PATCH :id/status — aprueba o rechaza una solicitud
+  @ApiOperation({ summary: 'Aprobar o rechazar una solicitud' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, description: 'Estado actualizado' })
   @Patch(':id/status')
   updateStatus(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: UpdateAdoptionRequestDto,
+    @Body() dto: UpdateAdoptionStatusDto,
   ) {
     return this.adoptionRequestsService.updateStatus(id, dto);
   }
